@@ -1,16 +1,25 @@
-// Connect to require, express, and Heroku 
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3001;
-// Add middleware -- routes for apiRoutes and htmlRoutes
-const apiRoutes = require("./routes/apiRoutes");
-const htmlRoutes = require("./routes/htmlRoutes");
-// Parse data if it comes through urlencoded, json, or static
+
+const apiRoutes = require("./routes/API-routes");
+const htmlRoutes = require("./routes/HTML-routes");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
-// Use the routes
+
 app.use("/api", apiRoutes);
 app.use("/", htmlRoutes);
-// Listen at port
-app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
+
+const server = app.listen(PORT, (err) => {
+  if (err) {
+    console.error("Error starting server:", err);
+  } else {
+    console.log(`Listening on PORT: ${PORT}`);
+  }
+});
+
+server.on("error", (err) => {
+  console.error("Server error:", err);
+});
